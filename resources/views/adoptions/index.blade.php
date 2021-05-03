@@ -24,7 +24,17 @@
                                         <td>{{ $adoption['status'] }}</td>
                                         <td><img style="width:100px; height:100px" src="{{ asset('storage/images/' . App\Models\Animal::select('image2')->where('id', $adoption['petid'])->get()->first()['image2']) }}"
                                             alt=""></td>
-                                        <td>
+
+                                     @if(App\Models\Adoption::select('status')->where('petid', $adoption['petid'])->where('user_id', $adoption['user_id'])->exists())
+
+                                         @if ((App\Models\Adoption::select('status')->where('petid', $adoption['petid'])->where('user_id', $adoption['user_id'])->get()->first()['status'] == 'accepted'))
+                                         <td></td>
+                                         @elseif ((App\Models\Adoption::select('status')->where('petid', $adoption['petid'])->where('user_id', $adoption['user_id'])->get()->first()['status'] == 'rejected'))
+                                         <td></td>
+
+                                         @else
+
+                                      <td>
                                             <form
                                                 action="{{ action([App\Http\Controllers\AdoptionController::class, 'create'], ['adoption' => $adoption['status'], $adoption['id']]) }}"
                                                 method="get">
@@ -46,6 +56,9 @@
                                                 <button class="btn btn-warning" type="submit"> Reject</button>
                                             </form>
                                         </td>
+
+                                        @endif
+                                        @endif
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -56,3 +69,4 @@
         </div>
     </div>
 @endsection
+
