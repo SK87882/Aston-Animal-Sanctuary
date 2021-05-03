@@ -14,7 +14,7 @@
                                     <th>Animal Type</th>
                                     <th>Species</th>
                                     <th>Description</th>
-                                    <th>Available for Adoption?</th>
+                                    <th>Available</th>
                                     <th>Images</th>
                                     <th colspan="3">Action</th>
                                 </tr>
@@ -50,8 +50,17 @@
                                                 </form>
                                             </td>
 
-                                       @elseif (Gate::denies('displayall') == true)
-                                        
+                                    @elseif (Gate::denies('displayall') == true)
+                                    @if(App\Models\Adoption::select('status')->where('petid', $animal['id'])->exists())
+
+                                    @if ((App\Models\Adoption::select('status')->where('petid', $animal['id'])->get()->first()['status'] == 'accepted'))
+
+
+
+                                        @endif
+                                    @else
+
+
                                                 <td>
 
                                                     <form
@@ -66,8 +75,9 @@
 
                                                     </form>
                                                 </td>
-                                              @endif
-                                         
+                                     @endif
+                                     @endif
+
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -78,3 +88,4 @@
         </div>
     </div>
 @endsection
+
